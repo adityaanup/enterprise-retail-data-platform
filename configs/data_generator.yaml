@@ -1,0 +1,17 @@
+project:
+  name: enterprise-retail-data-platform
+  environment: development
+
+generation:
+  random_seed: 42
+  output_format: csv
+  output_directory: data_generator/output
+
+entities:
+  customers: 1000
+  products: 500
+  stores: 25
+  employees: 200
+  orders: 10000
+  payments: 10000
+  inventory: 5000
