@@ -1,0 +1,29 @@
+[project]
+name = "enterprise-retail-data-platform"
+version = "0.1.0"
+description = "Enterprise Retail Data Platform using Snowflake, dbt, Airflow, PySpark and AWS"
+requires-python = ">=3.14"
+authors = [
+    { name = "Anup Singh" }
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py314"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "UP",
+    "B"
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
