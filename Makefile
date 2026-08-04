@@ -1,10 +1,8 @@
-.PHONY: format lint test
-
-format:
-	ruff format .
+test:
+	uv run pytest
 
 lint:
-	ruff check .
+	uv run ruff check .
 
-test:
-	pytest
+format:
+	uv run ruff format .
