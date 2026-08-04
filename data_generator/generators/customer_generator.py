@@ -53,3 +53,11 @@ class CustomerGenerator:
             created_at=datetime.now(),
             updated_at=datetime.now(),
         )
+
+    def generate_many(
+        self,
+        count: int,
+    ) -> list[Customer]:
+        """Generate multiple customers."""
+
+        return [self.generate(i) for i in range(1, count + 1)]
