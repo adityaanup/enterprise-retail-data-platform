@@ -5,8 +5,8 @@ from __future__ import annotations
 import csv
 from datetime import date, datetime
 
-from data_generator.domain.customer import Customer
-from data_generator.writers.csv_writer import CsvWriter
+from retailpulse.domain.customer import Customer
+from retailpulse.writers.csv_writer import CsvWriter
 
 
 def create_customer() -> Customer:

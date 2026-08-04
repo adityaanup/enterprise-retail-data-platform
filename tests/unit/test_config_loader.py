@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from data_generator.config import ConfigLoader
+from retailpulse.config import ConfigLoader
 
 
 def test_load_configuration() -> None:

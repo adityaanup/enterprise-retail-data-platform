@@ -1,6 +1,6 @@
 """Unit tests for configuration models."""
 
-from data_generator.config import (
+from retailpulse.config import (
     AppConfig,
     EntityConfig,
     GenerationConfig,

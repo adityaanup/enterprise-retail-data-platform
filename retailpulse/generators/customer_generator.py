@@ -7,7 +7,7 @@ from random import Random
 
 from faker import Faker
 
-from data_generator.domain.customer import Customer
+from retailpulse.domain.customer import Customer
 
 
 class CustomerGenerator:

@@ -1,4 +1,4 @@
-from data_generator.generators.customer_generator import CustomerGenerator
+from retailpulse.generators.customer_generator import CustomerGenerator
 
 
 def test_generate_customer() -> None:

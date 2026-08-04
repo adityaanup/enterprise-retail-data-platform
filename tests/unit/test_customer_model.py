@@ -1,6 +1,6 @@
 from datetime import date, datetime
 
-from data_generator.domain.customer import Customer
+from retailpulse.domain.customer import Customer
 
 
 def test_customer_creation() -> None:

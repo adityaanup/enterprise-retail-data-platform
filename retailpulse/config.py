@@ -8,7 +8,7 @@ from pathlib import Path
 
 import yaml
 
-from data_generator.exceptions import (
+from retailpulse.exceptions import (
     ConfigurationFileNotFoundError,
     ConfigurationParseError,
     ConfigurationValidationError,

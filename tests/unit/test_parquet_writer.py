@@ -6,8 +6,8 @@ from datetime import date, datetime
 
 import pandas as pd
 
-from data_generator.domain.customer import Customer
-from data_generator.writers.parquet_writer import ParquetWriter
+from retailpulse.domain.customer import Customer
+from retailpulse.writers.parquet_writer import ParquetWriter
 
 
 def create_customer() -> Customer:
