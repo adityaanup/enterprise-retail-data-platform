@@ -41,7 +41,7 @@ pythonpath = ["."]
 testpaths = ["tests"]
 
 [project.scripts]
-retailpulse = "data_generator.cli:app"
+retailpulse = "retailpulse.cli:app"
 
 [tool.uv]
 package = true
