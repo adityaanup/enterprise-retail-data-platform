@@ -20,6 +20,7 @@ class Customer:
     gender: str
 
     address_line1: str
+    address_line2: str | None
     city: str
     state: str
     postal_code: str
