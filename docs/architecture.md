@@ -1,90 +1,362 @@
-# Enterprise Retail Data Platform Architecture
+# RetailPulse Architecture
 
 ## Overview
 
-This project demonstrates an end-to-end modern data platform built using industry-standard tools and practices.
+RetailPulse is an end-to-end cloud-native data engineering platform that demonstrates how retail customer data is generated, ingested, transformed, and exposed for analytics using modern data engineering technologies.
 
-The platform simulates a retail organization by generating synthetic business data, ingesting it into Snowflake, transforming it with dbt, orchestrating workflows with Airflow, and exposing curated data for analytics.
+The platform follows the **Medallion Architecture** pattern, separating data into distinct layers to improve data quality, maintainability, and scalability.
 
 ---
 
-## High-Level Architecture
+# High-Level Architecture
 
-```text
-                  RetailNova
-
-        +---------------------------+
-        | Python Data Generator     |
-        +------------+--------------+
-                     |
-                     v
-              Parquet Files
-                     |
-                     v
-                AWS S3 (Bronze)
-                     |
-                     v
-        Snowflake External Stage
-                     |
-                     v
-              Landing / Raw Layer
-                     |
-                     v
-                  dbt Models
-                     |
-        +------------+------------+
-        |                         |
-   Dimension Tables         Fact Tables
-        |                         |
-        +------------+------------+
-                     |
-                     v
-                 Power BI
+```
+                        RetailPulse CLI
+                               │
+                               ▼
+                    Generate Customer Data
+                               │
+                               ▼
+                   customers.parquet / csv
+                               │
+                               ▼
+                         Amazon S3 Bucket
+                               │
+                               ▼
+                 Snowflake Storage Integration
+                               │
+                               ▼
+                     Snowflake External Stage
+                               │
+                               ▼
+                     COPY INTO RAW.CUSTOMERS
+                               │
+                               ▼
+                     CURATED.CUSTOMERS
+                               │
+                               ▼
+                    CORE.DIM_CUSTOMERS
+                               │
+                               ▼
+                 ANALYTICS.VW_CUSTOMERS
+                               │
+                               ▼
+                    Dashboards / BI Tools
 ```
 
 ---
 
-## Technology Stack
+# Platform Components
 
-| Layer | Technology |
-|--------|------------|
-| Language | Python 3.14 |
-| Package Manager | uv |
-| Data Generation | Faker |
-| File Formats | CSV, Parquet |
-| Cloud Storage | AWS S3 |
-| Data Warehouse | Snowflake |
-| Transformation | dbt |
-| Orchestration | Airflow |
-| CI/CD | GitHub Actions |
-| Testing | Pytest |
-| Linting | Ruff |
+## Python Data Generator
+
+RetailPulse includes a Python-based synthetic data generator that creates realistic retail customer datasets.
+
+Current capabilities:
+
+- Customer data generation
+- CSV export
+- Parquet export
+- Command Line Interface (CLI)
+
+Technologies:
+
+- Python
+- Faker
+- Pandas
+- PyArrow
+- Typer
 
 ---
 
-## Project Structure
+## Amazon S3
 
-```text
-enterprise-retail-data-platform/
+Amazon S3 acts as the landing zone for generated datasets.
 
-configs/
-data_generator/
+Current bucket structure:
+
+```
+retailpulse-dev/
+
+└── bronze/
+    └── customers/
+        └── customers.parquet
+```
+
+Responsibilities:
+
+- Store generated datasets
+- Decouple data generation from ingestion
+- Provide scalable object storage
+
+---
+
+## Snowflake
+
+Snowflake serves as the cloud data warehouse for RetailPulse.
+
+Current implementation includes:
+
+- Database
+- Warehouses
+- Roles
+- Schemas
+- Storage Integration
+- External Stage
+- File Formats
+- COPY INTO pipeline
+
+---
+
+# Medallion Architecture
+
+RetailPulse follows a four-layer Medallion Architecture.
+
+```
+RAW
+   │
+   ▼
+CURATED
+   │
+   ▼
+CORE
+   │
+   ▼
+ANALYTICS
+```
+
+Each layer has a single responsibility.
+
+---
+
+## RAW Layer
+
+Schema:
+
+```
+RAW
+```
+
+Objects:
+
+```
+CUSTOMERS
+```
+
+Purpose:
+
+Store data exactly as received from the source system.
+
+Characteristics:
+
+- No transformations
+- Immutable landing zone
+- Source of truth
+- Mirrors source schema
+
+---
+
+## CURATED Layer
+
+Schema:
+
+```
+CURATED
+```
+
+Objects:
+
+```
+CUSTOMERS
+```
+
+Purpose:
+
+Clean and standardize raw data.
+
+Responsibilities:
+
+- Trim whitespace
+- Normalize casing
+- Standardize values
+- Preserve business meaning
+- Prepare data for business modeling
+
+---
+
+## CORE Layer
+
+Schema:
+
+```
+CORE
+```
+
+Objects:
+
+```
+DIM_CUSTOMERS
+```
+
+Purpose:
+
+Create business-ready dimensional models.
+
+Business transformations include:
+
+- Customer surrogate key
+- Full customer name
+- Active customer flag
+
+The CORE layer provides stable, reusable business entities for downstream analytics.
+
+---
+
+## ANALYTICS Layer
+
+Schema:
+
+```
+ANALYTICS
+```
+
+Objects:
+
+```
+VW_CUSTOMERS
+```
+
+Purpose:
+
+Expose business-friendly datasets for reporting.
+
+Responsibilities:
+
+- Reporting views
+- Derived attributes
+- Analytics-ready schema
+
+Example:
+
+Customer age is calculated dynamically within the analytics layer instead of being persisted.
+
+---
+
+# Data Flow
+
+The current customer pipeline follows this sequence.
+
+```
+Python Generator
+        │
+        ▼
+customers.parquet
+        │
+        ▼
+Amazon S3
+        │
+        ▼
+External Stage
+        │
+        ▼
+RAW.CUSTOMERS
+        │
+        ▼
+CURATED.CUSTOMERS
+        │
+        ▼
+CORE.DIM_CUSTOMERS
+        │
+        ▼
+ANALYTICS.VW_CUSTOMERS
+```
+
+---
+
+# Repository Organization
+
+```
 snowflake/
-dbt/
-airflow/
-tests/
-docs/
+
+├── setup/
+│
+├── raw/
+│
+├── curated/
+│
+├── core/
+│
+└── analytics/
 ```
+
+Each directory contains:
+
+- Object creation scripts
+- Data loading scripts (where applicable)
+- Validation scripts
 
 ---
 
-## Architecture Principles
+# Validation Strategy
 
-- Configuration-driven
-- Infrastructure as Code
-- Immutable configuration
-- Modular design
-- Reusable components
-- Automated testing
-- Git Flow
+Every Medallion layer contains validation scripts.
+
+Validation includes:
+
+- Row counts
+- Duplicate business keys
+- Null checks
+- Data distribution
+- Timestamp validation
+
+This ensures data quality throughout the pipeline.
+
+---
+
+# Technology Stack
+
+| Component | Technology |
+|-----------|------------|
+| Programming Language | Python 3.14 |
+| Data Warehouse | Snowflake |
+| Cloud Storage | Amazon S3 |
+| File Format | Parquet |
+| Data Processing | Pandas |
+| Columnar Storage | PyArrow |
+| Synthetic Data | Faker |
+| CLI | Typer |
+| Testing | Pytest |
+| Package Manager | uv |
+| Version Control | Git & GitHub |
+
+---
+
+# Current Scope
+
+Implemented
+
+- Customer data generation
+- Amazon S3 landing zone
+- Snowflake ingestion pipeline
+- Medallion Architecture
+- Customer dimension
+- Analytics view
+- Validation framework
+
+---
+
+# Future Enhancements
+
+Planned additions include:
+
+- Product domain
+- Store domain
+- Order domain
+- Fact Sales model
+- Snowflake Streams
+- Snowflake Tasks
+- Dynamic Tables
+- dbt
+- Apache Airflow
 - CI/CD
+- Data Quality Framework
