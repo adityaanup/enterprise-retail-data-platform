@@ -21,6 +21,7 @@ def create_customer() -> Customer:
         date_of_birth=date(1990, 1, 1),
         gender="Male",
         address_line1="123 Main Street",
+        address_line2="Apt. 953",
         city="Dallas",
         state="Texas",
         postal_code="75001",

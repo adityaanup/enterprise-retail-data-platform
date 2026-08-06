@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from random import Random
+from random import Random, choices
 
 from faker import Faker
 
@@ -27,6 +27,23 @@ class CustomerGenerator:
         first_name = self.fake.first_name()
         last_name = self.fake.last_name()
 
+        if self.fake.boolean(chance_of_getting_true=30):
+            address_line2 = self.fake.secondary_address()
+        else:
+            address_line2 = None
+
+        loyalty_tier = choices(
+            population=["BRONZE", "SILVER", "GOLD", "PLATINUM"],
+            weights=[60, 25, 10, 5],
+            k=1,
+        )[0]
+
+        status = choices(
+            population=["ACTIVE", "INACTIVE"],
+            weights=[95, 5],
+            k=1,
+        )[0]
+
         return Customer(
             customer_id=f"CUST-2026-{customer_number:08d}",
             first_name=first_name,
@@ -39,17 +56,18 @@ class CustomerGenerator:
             ),
             gender=self.random.choice(["Male", "Female"]),
             address_line1=self.fake.street_address(),
+            address_line2=address_line2,
             city=self.fake.city(),
             state=self.fake.state(),
             postal_code=self.fake.postcode(),
             country="USA",
-            loyalty_tier=self.random.choice(self.LOYALTY_TIERS),
-            marketing_opt_in=self.random.choice([True, False]),
+            loyalty_tier=loyalty_tier,
+            marketing_opt_in=self.fake.boolean(chance_of_getting_true=70),
             registration_date=self.fake.date_between(
                 start_date="-10y",
                 end_date="today",
             ),
-            status=self.random.choice(self.STATUSES),
+            status=status,
             created_at=datetime.now(),
             updated_at=datetime.now(),
         )

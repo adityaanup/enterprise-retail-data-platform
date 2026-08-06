@@ -24,8 +24,6 @@ class ParquetWriter:
         )
 
         dataframe = pd.DataFrame([asdict(record) for record in records])
-        print(dataframe.dtypes)
-        print(dataframe[["created_at", "updated_at"]].head())
 
         dataframe.to_parquet(
             output_file,
