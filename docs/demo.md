@@ -83,7 +83,7 @@ aws s3 ls s3://retailpulse-dev/bronze/customers/
 
 ### Screenshot
 
-![Amazon S3 Bucket](screenshots/02-s3-bucket.png)
+![Amazon S3 Bucket](screenshots/customer/02-s3-bucket.png)
 
 ---
 
@@ -99,7 +99,7 @@ RetailPulse uses separate schemas for each Medallion layer.
 
 ### Screenshot
 
-![Snowflake Schemas](screenshots/03-snowflake-schemas.png)
+![Snowflake Schemas](screenshots/customer/03-snowflake-schemas.png)
 
 ---
 
@@ -131,7 +131,7 @@ LIMIT 20;
 
 ### Screenshot
 
-![RAW Customers](screenshots/04-raw-customers.png)
+![RAW Customers](screenshots/customer/04-raw-customers.png)
 
 ---
 
@@ -186,7 +186,7 @@ Business transformations include:
 
 ### Screenshot
 
-![Customer Dimension](screenshots/05-dim-customers.png)
+![Customer Dimension](screenshots/customer/05-dim-customers.png)
 
 ---
 
@@ -216,7 +216,7 @@ LIMIT 20;
 
 ### Screenshot
 
-![Analytics View](screenshots/06-vw-customers.png)
+![Analytics View](screenshots/customer/06-vw-customers.png)
 
 ---
 
